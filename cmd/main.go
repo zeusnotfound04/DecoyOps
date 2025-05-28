@@ -24,7 +24,7 @@ func main() {
 	}
 
 	if *fileEnum {
-		executor.ProcessDiscovery()
+		executor.FileEnumeration()
 	}
 
 	if *NetworkScan {
