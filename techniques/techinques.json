@@ -1,0 +1,17 @@
+[
+  {
+    "id": "T1057",
+    "name": "Process Discovery",
+    "description": "Lists running processes on the system"
+  },
+  {
+    "id": "T1083",
+    "name": "File and Directory Discovery",
+    "description": "Lists files and directories in a target directory"
+  },
+  {
+    "id": "T1046",
+    "name": "Network Service Scanning",
+    "description": "Scans ports on local system"
+  }
+]
