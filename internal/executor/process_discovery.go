@@ -84,7 +84,7 @@ func ProcessDiscovery() {
 	if runtime.GOOS == "windows" {
 		cmd = exec.Command("wmic", "process", "get", "ProcessId,Name,WorkingSetSize,Status,CreationDate,ThreadCount", "/format:csv")
 	} else {
-		cmd = exec.Command("ps", "aux")
+		cmd = exec.Command("ps", "-eo", "pid,comm,pcpu,pmem,stat,start,time")
 	}
 
 	output, err := cmd.Output()
@@ -121,6 +121,31 @@ func ProcessDiscovery() {
 					Status:    strings.TrimSpace(parts[4]),
 					StartTime: startTime,
 					CPU:       fmt.Sprintf("Threads: %s", strings.TrimSpace(parts[6])),
+				})
+			}
+		}
+	} else {
+		for i, line := range lines {
+			if i == 0 || len(line) == 0 { 
+				continue
+			}
+			fields := strings.Fields(line)
+			if len(fields) >= 7 {
+				pid := fields[0]
+				name := fields[1]
+				cpu := fields[2]
+				memory := fields[3]
+				status := fields[4]
+				startTime := fields[5]
+				runTime := fields[6]
+
+				processInfos = append(processInfos, ProcessInfo{
+					Name:      name,
+					PID:       pid,
+					Memory:    fmt.Sprintf("%.2f %%", parseFloat(memory)),
+					Status:    status,
+					StartTime: startTime,
+					CPU:       fmt.Sprintf("CPU: %s%%, Runtime: %s", cpu, runTime),
 				})
 			}
 		}
@@ -170,4 +195,12 @@ func ProcessDiscovery() {
 	details.WriteString("════════════════════════════════")
 
 	logger.Log("T1057", "Process Discovery", details.String())
+}
+
+func parseFloat(s string) float64 {
+	f, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return 0.0
+	}
+	return f
 }
