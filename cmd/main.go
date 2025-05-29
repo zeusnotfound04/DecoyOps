@@ -29,17 +29,44 @@ func displayBanner() {
 | | | |  __| |   | |  | |\   /  | |  | |  ___/ \___ \ 
 | |_| | |__| |___| |__| | | |   | |__| | |     ____) |
 |____/|______\____\____/  |_|    \____/|_|    |_____/ `)
-	
+
 	fmt.Printf("%s%s", Yellow, Bold)
 	fmt.Println(`
            ◄═══ Advanced Deception Operations ═══►`)
-	
-	fmt.Printf("%s%s", Green, Reset)
+	fmt.Printf("%s%s", Green, Bold)
 	fmt.Println(`
-    [+] Tactical Misdirection & Counter-Intelligence Suite
-    [*] Deployment Ready - Operational Security Enabled
+    [+] Process Analysis & System Reconnaissance Tool
+    [+] File System Enumeration Engine
+    [+] Network Service Discovery Module
+    [*] Version 1.0.0 - Ready for Deployment
 `)
 	fmt.Printf("%s", Reset)
+}
+
+func displaySummary(techniques map[string]bool) {
+	fmt.Printf("\n%s%s═══════════════════ Execution Summary ═══════════════════%s\n", Purple, Bold, Reset)
+
+	executedCount := 0
+	for _, executed := range techniques {
+		if executed {
+			executedCount++
+		}
+	}
+
+	fmt.Printf("%s%s[*] Total Techniques Executed: %d%s\n", Green, Bold, executedCount, Reset)
+
+	if techniques["process"] {
+		fmt.Printf("%s%s[+] Process Discovery - Completed%s\n", Cyan, Bold, Reset)
+	}
+	if techniques["file"] {
+		fmt.Printf("%s%s[+] File Enumeration - Completed%s\n", Cyan, Bold, Reset)
+	}
+	if techniques["network"] {
+		fmt.Printf("%s%s[+] Network Scanning - Completed%s\n", Cyan, Bold, Reset)
+	}
+
+	fmt.Printf("\n%s%s[*] Results saved in: output/output.json%s\n", Yellow, Bold, Reset)
+	fmt.Printf("%s%s═════════════════════════════════════════════════════%s\n", Purple, Bold, Reset)
 }
 
 func main() {
@@ -53,21 +80,28 @@ func main() {
 
 	logger.InitLogger()
 
+	techniques := make(map[string]bool)
+
 	if *processDiscovery {
 		executor.ProcessDiscovery()
+		techniques["process"] = true
 	}
 
 	if *fileEnum {
 		executor.FileEnumeration()
+		techniques["file"] = true
 	}
 
 	if *NetworkScan {
 		executor.NetworkScan()
+		techniques["network"] = true
 	}
 
 	if !*processDiscovery && !*fileEnum && !*NetworkScan {
 		fmt.Printf("%s%s", Yellow, Bold)
 		fmt.Println("No technique selected. Use --help to see available options.")
 		fmt.Printf("%s", Reset)
+	} else {
+		displaySummary(techniques)
 	}
 }
