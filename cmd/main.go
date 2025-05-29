@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 
 	"github.com/zeusnotfound04/DecoyOps/internal/executor"
 	"github.com/zeusnotfound04/DecoyOps/internal/logger"
@@ -69,14 +70,45 @@ func displaySummary(techniques map[string]bool) {
 	fmt.Printf("%s%s═════════════════════════════════════════════════════%s\n", Purple, Bold, Reset)
 }
 
+func displayHelp() {
+	fmt.Printf("%s%s╔════════════════ DecoyOps Commands ════════════════╗%s\n", Cyan, Bold, Reset)
+	fmt.Printf("%s%s║                                                   ║%s\n", Cyan, Bold, Reset)
+	fmt.Printf("%s%s║  Available Commands:                             ║%s\n", Cyan, Bold, Reset)
+	fmt.Printf("%s%s║                                                   ║%s\n", Cyan, Bold, Reset)
+	fmt.Printf("%s%s║  1. Process Discovery:                           ║%s\n", Yellow, Bold, Reset)
+	fmt.Printf("%s%s║     --process-discovery                          ║%s\n", White, Bold, Reset)
+	fmt.Printf("%s%s║     Enumerates running processes and their info  ║%s\n", Green, Bold, Reset)
+	fmt.Printf("%s%s║                                                   ║%s\n", Cyan, Bold, Reset)
+	fmt.Printf("%s%s║  2. File Enumeration:                            ║%s\n", Yellow, Bold, Reset)
+	fmt.Printf("%s%s║     --file-enum                                  ║%s\n", White, Bold, Reset)
+	fmt.Printf("%s%s║     Lists files and directories in current path  ║%s\n", Green, Bold, Reset)
+	fmt.Printf("%s%s║                                                   ║%s\n", Cyan, Bold, Reset)
+	fmt.Printf("%s%s║  3. Network Scanning:                            ║%s\n", Yellow, Bold, Reset)
+	fmt.Printf("%s%s║     --Network-scan                               ║%s\n", White, Bold, Reset)
+	fmt.Printf("%s%s║     Discovers open ports and network services    ║%s\n", Green, Bold, Reset)
+	fmt.Printf("%s%s║                                                   ║%s\n", Cyan, Bold, Reset)
+	fmt.Printf("%s%s║  Usage Examples:                                 ║%s\n", Purple, Bold, Reset)
+	fmt.Printf("%s%s║  DecoyOps.exe --process-discovery               ║%s\n", White, Bold, Reset)
+	fmt.Printf("%s%s║  DecoyOps.exe --file-enum                       ║%s\n", White, Bold, Reset)
+	fmt.Printf("%s%s║  DecoyOps.exe --Network-scan                    ║%s\n", White, Bold, Reset)
+	fmt.Printf("%s%s║                                                   ║%s\n", Cyan, Bold, Reset)
+	fmt.Printf("%s%s╚═══════════════════════════════════════════════════╝%s\n", Cyan, Bold, Reset)
+}
+
 func main() {
 	displayBanner()
 
-	processDiscovery := flag.Bool("process-discovery", false, "Simulate process discovery")
-	fileEnum := flag.Bool("file-enum", false, "Simulate process enumeration")
-	NetworkScan := flag.Bool("Network-scan", false, "Simulate network scanning")
+	helpFlag := flag.Bool("help", false, "Display detailed help information")
+	processDiscovery := flag.Bool("process-discovery", false, "Enumerate running processes and their details")
+	fileEnum := flag.Bool("file-enum", false, "List files and directories in the current path")
+	NetworkScan := flag.Bool("Network-scan", false, "Discover open ports and network services")
 
 	flag.Parse()
+
+	if *helpFlag {
+		displayHelp()
+		os.Exit(0)
+	}
 
 	logger.InitLogger()
 
