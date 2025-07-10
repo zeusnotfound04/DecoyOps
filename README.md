@@ -122,4 +122,4 @@ Contributions are welcome! Please feel free to submit pull requests.
 - Contributors and testers
 
 ---
-Created with by ZeusNotfound 🎗️🎗️
+Created with by ⚡ ZeusNotfound ⚡
